@@ -5,3 +5,11 @@
 .custom-primary{
     background-color: #0088CC !important;
 }
+
+/* .flip-card{ 
+    background-color: #F7F7F7 !important;
+} */
+
+.cursor-pointer{
+    cursor: pointer !important;
+}
