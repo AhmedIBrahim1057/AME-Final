@@ -1,0 +1,54 @@
+.cursor-pointer{
+    cursor: pointer !important;
+}
+
+.background-custom-color{
+    background-color: #0e3253 !important;
+}
+
+.text-custom-color{
+    color: #0e3253 !important;
+}
+
+.card-info.card-outline {
+    border-top: 3px solid #0e3253 !important;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #0e3253;
+    border-color: #0e3253;
+    box-shadow: none;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #0e3253;
+    border-color: #0e3253;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #0e3253;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.login-page{
+    background: url('../cmsFiles/dist/img/6.jpg') no-repeat center  !important;
+    background-size:  cover !important;
+}
+
+.delete-btn {
+    border: unset;
+    background: inherit;
+}
+
+.white-logo{
+    filter: brightness(0) invert(1) !important;
+}
