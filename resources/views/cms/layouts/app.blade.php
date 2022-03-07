@@ -16,7 +16,7 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <!-- Styles -->
+
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -37,8 +37,6 @@
     <link rel="stylesheet" href="{{ asset('cmsFiles/plugins/daterangepicker/daterangepicker.css') }}">
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('cmsFiles/plugins/summernote/summernote-bs4.min.css') }}">
-
-    <link rel="shortcut icon" href="img/favicon.png" />
 
     @yield('head')
 
@@ -63,7 +61,7 @@
     <script src="{{ asset('cmsFiles/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
-    $.widget.bridge('uibutton', $.ui.button)
+        $.widget.bridge('uibutton', $.ui.button)
     </script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('cmsFiles/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>

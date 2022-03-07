@@ -32,6 +32,14 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-luggage-cart"></i>
+              <p>
+                Products
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
               <p>
                 Clients
@@ -43,6 +51,14 @@
               <i class="nav-icon fas fa-handshake"></i>
               <p>
                 Partners
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-calendar-alt"></i>
+              <p>
+                Events
               </p>
             </a>
           </li>
