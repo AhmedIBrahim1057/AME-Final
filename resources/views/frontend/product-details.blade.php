@@ -74,7 +74,7 @@
                         <div class="d-sm-flex align-items-center justify-content-between">
                             <div class="projects-prev-next-left">
                                 <a href="#"> <i class="ti-arrow-left"></i> Previous Project</a>
-                            </div> <a href="{{ route('Products') }}"><i class="ti-layout-grid3-alt"></i></a>
+                            </div> <a href="{{ route('products') }}"><i class="ti-layout-grid3-alt"></i></a>
                             <div class="projects-prev-next-right"> <a href="#">Next Project <i class="ti-arrow-right"></i></a> </div>
                         </div>
                     </div>
