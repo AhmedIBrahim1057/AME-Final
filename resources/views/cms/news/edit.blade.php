@@ -74,6 +74,15 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-8">
+                          <div class="form-group">
+                              <label for="exampleSelectBorder">Website</label>
+                              <select class="custom-select" id="exampleSelectBorder" name="type" required>
+                                <option value="1" {{ $news->type == 1 ? 'selected' : ''  }}>Racking & Shop Fitting</option>
+                                <option value="2" {{ $news->type == 2 ? 'selected' : ''  }}>Scaffolding Framework</option>
+                              </select>
+                          </div>
+                        </div>
+                        <div class="col-md-8 pt-4">
                             <label for="">Title</label>
                             <input type="text" required name="title" class="form-control" placeholder="Enter Title" value="{{ $news->title }}">
                         </div>
@@ -81,7 +90,7 @@
                             <label for="">Image</label>
                             <div class="input-group cursor-pointer">
                                 <div class="custom-file">
-                                  <input type="file" name="image" required class="custom-file-input" id="exampleInputFile" value="{{ $news->image }}" />
+                                  <input type="file" name="image"  class="custom-file-input" id="exampleInputFile" value="{{ $news->image }}" />
                                   <label class="custom-file-label" for="exampleInputFile">{{ $news->image }}</label>
                                 </div>
                             </div>

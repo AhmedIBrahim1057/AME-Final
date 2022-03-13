@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Partner;
 
 class PartnersController extends Controller
 {
@@ -13,7 +14,8 @@ class PartnersController extends Controller
      */
     public function index()
     {
-        //
+        $partners = Partner::all();
+        return view('cms.partners.index', compact('partners') );
     }
 
     /**
@@ -23,7 +25,7 @@ class PartnersController extends Controller
      */
     public function create()
     {
-        //
+        return view('cms.partners.create');
     }
 
     /**
@@ -34,7 +36,17 @@ class PartnersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'type' => 'required',
+            'name' => 'required',
+            'image' => 'required',
+            'url' => 'required',
+        ]);
+
+        Partner::create($request->all());
+       
+        return redirect()->route('cms.partners.index')
+                        ->with('success','Partner created successfully.');
     }
 
     /**
@@ -45,7 +57,8 @@ class PartnersController extends Controller
      */
     public function show($id)
     {
-        //
+        $partner = Partner::find($id);
+        return view('cms.partners.show', compact('partner') );
     }
 
     /**
@@ -54,9 +67,9 @@ class PartnersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Partner $partner)
     {
-        //
+        return view('cms.partners.edit', compact('partner'));
     }
 
     /**
@@ -68,7 +81,22 @@ class PartnersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'url' => 'required',
+        ]);
+ 
+ 
+        $partner = Partner::find($id);
+        $partner->type = $request->get('type');
+        $partner->name = $request->get('name');
+        $partner->description = $request->get('description');
+        $partner->image = $request->get('image');
+        $partner->url = $request->get('url');
+        $partner->update();
+ 
+        return redirect()->route('cms.partners.index')
+                        ->with('success','Partner updated successfully.');
     }
 
     /**
@@ -79,6 +107,9 @@ class PartnersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $partner = Partner::find($id);
+        $partner->delete();
+        return redirect()->route('cms.partners.index')
+                        ->with('success','Partner deleted successfully.');
     }
 }

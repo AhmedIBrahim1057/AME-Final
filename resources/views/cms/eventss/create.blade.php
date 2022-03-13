@@ -38,7 +38,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Add News</h1>
+                    <h1 class="m-0">Add Event</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -47,9 +47,9 @@
                             <a href="{{route('cms.dashboard')}}">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{route('cms.news.index')}}">News</a>
+                            <a href="{{route('cms.events.index')}}">Events</a>
                         </li>
-                        <li class="breadcrumb-item active">Add News</li>
+                        <li class="breadcrumb-item active">Add Event</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -62,11 +62,11 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card card-outline card-info">
-            <form action="{{ route('cms.news.store') }}" method="post">
+            <form action="{{ route('cms.events.store') }}" method="post">
                 @csrf
                 <div class="card-header">
                     <h3 class="card-title">
-                    Fill The Form
+                      Fill The Form
                     </h3>
                 </div>
                 <!-- /.card-header -->
@@ -240,7 +240,7 @@
 
   })
   // BS-Stepper Init
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addeventListener('DOMContentLoaded', function () {
     window.stepper = new Stepper(document.querySelector('.bs-stepper'))
   })
 

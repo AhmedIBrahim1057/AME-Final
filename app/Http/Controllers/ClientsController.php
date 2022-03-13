@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Client;
 
 class ClientsController extends Controller
 {
@@ -13,7 +14,8 @@ class ClientsController extends Controller
      */
     public function index()
     {
-        //
+        $clients = Client::all();
+        return view('cms.clients.index', compact('clients') );
     }
 
     /**
@@ -23,7 +25,7 @@ class ClientsController extends Controller
      */
     public function create()
     {
-        //
+        return view('cms.clients.create');
     }
 
     /**
@@ -34,7 +36,17 @@ class ClientsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'type' => 'required',
+            'name' => 'required',
+            'image' => 'required',
+            'url' => 'required',
+        ]);
+
+        Client::create($request->all());
+       
+        return redirect()->route('cms.clients.index')
+                        ->with('success','client created successfully.');
     }
 
     /**
@@ -45,7 +57,8 @@ class ClientsController extends Controller
      */
     public function show($id)
     {
-        //
+        $client = Client::find($id);
+        return view('cms.clients.show', compact('client') );
     }
 
     /**
@@ -54,9 +67,9 @@ class ClientsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Client $client)
     {
-        //
+        return view('cms.clients.edit', compact('client'));
     }
 
     /**
@@ -68,7 +81,22 @@ class ClientsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'type' => 'required',
+            'name' => 'required',
+            'url' => 'required',
+        ]);
+ 
+ 
+        $client = Client::find($id);
+        $client->type = $request->get('type');
+        $client->name = $request->get('name');
+        $client->image = $request->get('image');
+        $client->url = $request->get('url');
+        $client->update();
+ 
+        return redirect()->route('cms.clients.index')
+                        ->with('success','client updated successfully.');
     }
 
     /**
@@ -79,6 +107,9 @@ class ClientsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $client = Client::find($id);
+        $client->delete();
+        return redirect()->route('cms.clients.index')
+                        ->with('success','client deleted successfully.');
     }
 }

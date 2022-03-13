@@ -23,7 +23,7 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('cms.projects.index') }}" class="nav-link">
               <i class="nav-icon fas fa-tasks"></i>
               <p>
                 Projects
@@ -31,7 +31,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('cms.products.index') }}" class="nav-link">
               <i class="nav-icon fas fa-luggage-cart"></i>
               <p>
                 Products
@@ -39,7 +39,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('cms.clients.index') }}" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
               <p>
                 Clients
@@ -47,7 +47,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('cms.partners.index') }}" class="nav-link">
               <i class="nav-icon fas fa-handshake"></i>
               <p>
                 Partners
@@ -55,7 +55,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('cms.events.index') }}" class="nav-link">
               <i class="nav-icon fas fa-calendar-alt"></i>
               <p>
                 Events

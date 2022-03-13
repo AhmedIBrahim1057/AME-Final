@@ -1,30 +1,30 @@
 @extends('cms.layouts.app')
 
 @section('head')
-  <!-- summernote -->
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/summernote/summernote-bs4.min.css')}}">
-  <!-- CodeMirror -->
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/codemirror/codemirror.css')}}">
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/codemirror/theme/monokai.css')}}">
-  <!-- SimpleMDE -->
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/simplemde/simplemde.min.css')}}">
-  <!-- daterange picker -->
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/daterangepicker/daterangepicker.css')}}">
-  <!-- iCheck for checkboxes and radio inputs -->
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
-  <!-- Bootstrap Color Picker -->
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
-  <!-- Select2 -->
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/select2/css/select2.min.css')}}">
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
-  <!-- Bootstrap4 Duallistbox -->
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css')}}">
-  <!-- BS Stepper -->
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/bs-stepper/css/bs-stepper.min.css')}}">
-  <!-- dropzonejs -->
-  <link rel="stylesheet" href="{{asset('cmsFiles/plugins/dropzone/min/dropzone.min.css')}}">
+<!-- summernote -->
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/summernote/summernote-bs4.min.css')}}">
+<!-- CodeMirror -->
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/codemirror/codemirror.css')}}">
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/codemirror/theme/monokai.css')}}">
+<!-- SimpleMDE -->
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/simplemde/simplemde.min.css')}}">
+<!-- daterange picker -->
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/daterangepicker/daterangepicker.css')}}">
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+<!-- Bootstrap Color Picker -->
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}">
+<!-- Tempusdominus Bootstrap 4 -->
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
+<!-- Select2 -->
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/select2/css/select2.min.css')}}">
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+<!-- Bootstrap4 Duallistbox -->
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css')}}">
+<!-- BS Stepper -->
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/bs-stepper/css/bs-stepper.min.css')}}">
+<!-- dropzonejs -->
+<link rel="stylesheet" href="{{asset('cmsFiles/plugins/dropzone/min/dropzone.min.css')}}">
 @endsection
 
 @section('content')
@@ -38,7 +38,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Add News</h1>
+                    <h1 class="m-0">Edit Event</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -47,9 +47,9 @@
                             <a href="{{route('cms.dashboard')}}">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{route('cms.news.index')}}">News</a>
+                            <a href="{{route('cms.events.index')}}">Events</a>
                         </li>
-                        <li class="breadcrumb-item active">Add News</li>
+                        <li class="breadcrumb-item active">Edit Event</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -62,46 +62,44 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card card-outline card-info">
-            <form action="{{ route('cms.news.store') }}" method="post">
+            <form action="{{ route('cms.events.update', $event) }}" method="post">
+                @method('PATCH')
                 @csrf
                 <div class="card-header">
                     <h3 class="card-title">
-                    Fill The Form
+                        Fill The Form
                     </h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-8">
-                            <div class="form-group">
+                          <div class="form-group">
                               <label for="exampleSelectBorder">Website</label>
                               <select class="custom-select" id="exampleSelectBorder" name="type" required>
-                                <option value="1">Racking & Shop Fitting</option>
-                                <option value="2">Scaffolding Framework</option>
+                                <option value="1" {{ $event->type == 1 ? 'selected' : ''  }}>Racking & Shop Fitting</option>
+                                <option value="2" {{ $event->type == 2 ? 'selected' : ''  }}>Scaffolding Framework</option>
                               </select>
-                            </div>
+                          </div>
                         </div>
                         <div class="col-md-8 pt-4">
                             <label for="">Title</label>
-                            <input type="text" required name="title" class="form-control" placeholder="Enter Title">
+                            <input type="text" required name="title" class="form-control" placeholder="Enter Title" value="{{ $event->title }}">
                         </div>
                         <div class="col-md-8 pt-4">
                             <label for="">Image</label>
                             <div class="input-group cursor-pointer">
                                 <div class="custom-file">
-                                <input type="file" name="image" required class="custom-file-input" id="exampleInputFile">
-                                <label class="custom-file-label" for="exampleInputFile">Choose Image</label>
+                                  <input type="file" name="image" class="custom-file-input" id="exampleInputFile" value="{{ $event->image }}" />
+                                  <label class="custom-file-label" for="exampleInputFile">{{ $event->image }}</label>
                                 </div>
-                                {{-- <div class="input-group-append">
-                                <span class="input-group-text">Upload</span>
-                                </div> --}}
                             </div>
                         </div>
                         <div class="col-md-8 pt-4">
                             <label for="">Date</label>
                             <div class="form-group">
                                 <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                    <input type="text" name="date" class="form-control datetimepicker-input" data-target="#reservationdate"/>
+                                    <input type="text" name="date" class="form-control datetimepicker-input" data-target="#reservationdate" value="{{ $event->date }}" />
                                     <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
@@ -110,7 +108,9 @@
                         </div>
                         <div class="col-md-8 pt-4">
                             <label for="">Description</label>
-                            <textarea name="description" required id="summernote"> </textarea>
+                            <textarea name="description" required id="summernote"> 
+                              {{$event->description}}
+                            </textarea>
                         </div>
                     </div>
                 </div>
@@ -122,7 +122,7 @@
           </div>
           <!-- /.col-->
         </div>
-      </section>
+    </section>
       <!-- /.content -->
     
 </div>
@@ -327,5 +327,4 @@
     });
   })
 </script>
-
 @endsection

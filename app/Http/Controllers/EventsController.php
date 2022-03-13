@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\News;
+use App\Models\Event;
 
-class NewsController extends Controller
+class EventsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::all();
-        return view('cms.news.index', compact('news') );
+        $events = Event::all();
+        return view('cms.events.index', compact('events') );
     }
 
     /**
@@ -25,7 +25,7 @@ class NewsController extends Controller
      */
     public function create()
     {
-        return view('cms.news.create');
+        return view('cms.events.create');
     }
 
     /**
@@ -44,10 +44,10 @@ class NewsController extends Controller
             'date' => 'required',
         ]);
 
-        News::create($request->all());
+        Event::create($request->all());
        
-        return redirect()->route('cms.news.index')
-                        ->with('success','News created successfully.');
+        return redirect()->route('cms.events.index')
+                        ->with('success','Event created successfully.');
     }
 
     /**
@@ -58,8 +58,8 @@ class NewsController extends Controller
      */
     public function show($id)
     {
-        $news = News::find($id);
-        return view('cms.news.show', compact('news') );
+        $event = Event::find($id);
+        return view('cms.events.show', compact('event') );
     }
 
     /**
@@ -68,9 +68,9 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(News $news)
+    public function edit(Event $event)
     {
-        return view('cms.news.edit', compact('news'));
+        return view('cms.events.edit', compact('event'));
     }
 
     /**
@@ -88,18 +88,16 @@ class NewsController extends Controller
             'date' => 'required',
         ]);
  
+        $event = Event::find($id);
+        $event->type = $request->get('type');
+        $event->title = $request->get('title');
+        $event->description = $request->get('description');
+        $event->image = $request->get('image');
+        $event->date = $request->get('date');
+        $event->update();
  
-        $news = News::find($id);
-        $news->type = $request->get('type');
-        $news->title = $request->get('title');
-        $news->description = $request->get('description');
-        $news->image = $request->get('image');
-        $news->date = $request->get('date');
- 
-        $news->update();
- 
-        return redirect()->route('cms.news.index')
-                        ->with('success','News updated successfully.');
+        return redirect()->route('cms.events.index')
+                        ->with('success','Event updated successfully.');
     }
 
     /**
@@ -110,9 +108,9 @@ class NewsController extends Controller
      */
     public function destroy($id)
     {
-        $news = News::find($id);
-        $news->delete();
-        return redirect()->route('cms.news.index')
-                        ->with('success','News deleted successfully.');
+        $event = Event::find($id);
+        $event->delete();
+        return redirect()->route('cms.events.index')
+                        ->with('success','Event deleted successfully.');
     }
 }

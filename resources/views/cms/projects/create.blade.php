@@ -38,7 +38,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Add News</h1>
+                    <h1 class="m-0">Add Project</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -47,9 +47,9 @@
                             <a href="{{route('cms.dashboard')}}">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{route('cms.news.index')}}">News</a>
+                            <a href="{{route('cms.projects.index')}}">Projects</a>
                         </li>
-                        <li class="breadcrumb-item active">Add News</li>
+                        <li class="breadcrumb-item active">Add Project</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -62,7 +62,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card card-outline card-info">
-            <form action="{{ route('cms.news.store') }}" method="post">
+            <form action="{{ route('cms.projects.store') }}" method="post">
                 @csrf
                 <div class="card-header">
                     <h3 class="card-title">
@@ -230,8 +230,8 @@
     //color picker with addon
     $('.my-colorpicker2').colorpicker()
 
-    $('.my-colorpicker2').on('colorpickerChange', function(event) {
-      $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+    $('.my-colorpicker2').on('colorpickerChange', function(project) {
+      $('.my-colorpicker2 .fa-square').css('color', project.color.toString());
     })
 
     $("input[data-bootstrap-switch]").each(function(){
@@ -240,7 +240,7 @@
 
   })
   // BS-Stepper Init
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addprojectListener('DOMContentLoaded', function () {
     window.stepper = new Stepper(document.querySelector('.bs-stepper'))
   })
 

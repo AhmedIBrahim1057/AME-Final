@@ -39,4 +39,9 @@ Route::get('/news-details', [App\Http\Controllers\FrontendController::class, 'ne
 Route::group(['prefix'=>'cms','as'=>'cms.'], function(){
     Route::get('/', [App\Http\Controllers\CMSController::class, 'index'])->name('dashboard');
     Route::resource('news', App\Http\Controllers\NewsController::class);
+    Route::resource('events', App\Http\Controllers\EventsController::class);
+    Route::resource('partners', App\Http\Controllers\PartnersController::class);
+    Route::resource('clients', App\Http\Controllers\ClientsController::class);
+    Route::resource('products', App\Http\Controllers\ProductsController::class);
+    Route::resource('projects', App\Http\Controllers\ProjectsController::class);
 });

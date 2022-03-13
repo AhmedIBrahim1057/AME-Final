@@ -38,7 +38,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Add News</h1>
+                    <h1 class="m-0">Add Client</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -47,9 +47,9 @@
                             <a href="{{route('cms.dashboard')}}">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{route('cms.news.index')}}">News</a>
+                            <a href="{{route('cms.clients.index')}}">Clients</a>
                         </li>
-                        <li class="breadcrumb-item active">Add News</li>
+                        <li class="breadcrumb-item active">Add Client</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -62,7 +62,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card card-outline card-info">
-            <form action="{{ route('cms.news.store') }}" method="post">
+            <form action="{{ route('cms.clients.store') }}" method="post">
                 @csrf
                 <div class="card-header">
                     <h3 class="card-title">
@@ -82,8 +82,8 @@
                             </div>
                         </div>
                         <div class="col-md-8 pt-4">
-                            <label for="">Title</label>
-                            <input type="text" required name="title" class="form-control" placeholder="Enter Title">
+                            <label for="">Name</label>
+                            <input type="text" required name="name" class="form-control" placeholder="Enter client name">
                         </div>
                         <div class="col-md-8 pt-4">
                             <label for="">Image</label>
@@ -98,20 +98,13 @@
                             </div>
                         </div>
                         <div class="col-md-8 pt-4">
-                            <label for="">Date</label>
-                            <div class="form-group">
-                                <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                    <input type="text" name="date" class="form-control datetimepicker-input" data-target="#reservationdate"/>
-                                    <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <label for="">URL</label>
+                            <input type="text" required name="url" class="form-control" placeholder="Enter client url">
                         </div>
-                        <div class="col-md-8 pt-4">
+                        {{-- <div class="col-md-8 pt-4">
                             <label for="">Description</label>
-                            <textarea name="description" required id="summernote"> </textarea>
-                        </div>
+                            <textarea name="description" id="summernote"> </textarea>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="card-footer">

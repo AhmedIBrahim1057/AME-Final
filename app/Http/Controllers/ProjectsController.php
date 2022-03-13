@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Project;
 
 class ProjectsController extends Controller
 {
@@ -13,7 +14,8 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-        //
+        $projects = Project::all();
+        return view('cms.projects.index', compact('projects') );
     }
 
     /**
@@ -23,7 +25,7 @@ class ProjectsController extends Controller
      */
     public function create()
     {
-        //
+        return view('cms.projects.create');
     }
 
     /**
@@ -34,7 +36,19 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'type' => 'required',
+            'title' => 'required',
+            'description' => 'required',
+            'image' => 'required',
+            'date' => 'required',
+        ]);
+
+        Project::create($request->all());
+
+       
+        return redirect()->route('cms.projects.index')
+                        ->with('success','project created successfully.');
     }
 
     /**
@@ -45,7 +59,8 @@ class ProjectsController extends Controller
      */
     public function show($id)
     {
-        //
+        $project = Project::find($id);
+        return view('cms.projects.show', compact('project') );
     }
 
     /**
@@ -54,9 +69,9 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Project $project)
     {
-        //
+        return view('cms.projects.edit', compact('project'));
     }
 
     /**
@@ -68,7 +83,23 @@ class ProjectsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'date' => 'required',
+        ]);
+ 
+ 
+        $project = Project::find($id);
+        $project->type = $request->get('type');
+        $project->title = $request->get('title');
+        $project->description = $request->get('description');
+        $project->image = $request->get('image');
+        $project->date = $request->get('date');
+        $project->update();
+ 
+        return redirect()->route('cms.projects.index')
+                        ->with('success','project updated successfully.');
     }
 
     /**
@@ -79,6 +110,9 @@ class ProjectsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $project = Project::find($id);
+        $project->delete();
+        return redirect()->route('cms.projects.index')
+                        ->with('success','project deleted successfully.');
     }
 }
