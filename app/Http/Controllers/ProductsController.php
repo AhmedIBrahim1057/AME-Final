@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Storage;
 
 class ProductsController extends Controller
 {
@@ -44,16 +45,22 @@ class ProductsController extends Controller
             'date' => 'required',
         ]);
 
-        $imageName = time().'.'.$request->image->extension();  
-        $request->image->move(public_path('uploads/products'), $imageName);
+        $product = new Product();
+        $product->fill( $request->except('image') );
+        $product->save();
+        $product->image = "product-main-$product->id";
+        $product->save();
 
-        Product::create([
-            'type' => $request->type ,
-            'title' => $request->title ,
-            'description' => $request->description ,
-            'image' => $imageName ,
-            'date' => $request->date
-        ]);
+        $this->saveRequestFile( $request->image , "product-main-$product->id" , "/files/products/$product->id" );
+
+        // foreach($request->gallary as $image){
+        //     $products_images = new products_images();
+        //     $products_images->product_id = $product->id;
+        //     $products_images->save();
+        //     $products_images->image = "product-gallary-$product->id";
+        //     $products_images->save();
+        //     $this->saveRequestFile( $request->image , "product-gallary-$products_images->id" , "/files/products/$product->id/gallary" );
+        // }
 
         return redirect()->route('cms.products.index')
                         ->with('success','product created successfully.');
@@ -89,7 +96,7 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
         $request->validate([
             'title' => 'required',
@@ -97,14 +104,18 @@ class ProductsController extends Controller
             'date' => 'required',
         ]);
  
+        $file = $this->findFirstFile("/files/products/$product->id", $product->image);
+        if($file){
+            Storage::delete($file);
+        };
+
+        $product->fill( $request->except('image') );
+        $product->save();
+        $product->image = "product-main-$product->id";
+        $product->save();
+
+        $this->saveRequestFile( $request->image , "product-main-$product->id" , "/files/products/$product->id" );
  
-        $product = Product::find($id);
-        $product->type = $request->get('type');
-        $product->title = $request->get('title');
-        $product->description = $request->get('description');
-        $product->image = $request->get('image');
-        $product->date = $request->get('date');
-        $product->update();
  
         return redirect()->route('cms.products.index')
                         ->with('success','product updated successfully.');
@@ -122,5 +133,39 @@ class ProductsController extends Controller
         $product->delete();
         return redirect()->route('cms.products.index')
                         ->with('success','product deleted successfully.');
+    }
+
+    function findFirstFile($folder, $findFileName) {
+    
+        $filesPaths = $this->findFiles($folder, $findFileName);
+
+        if(count($filesPaths)>0) {
+            return $filesPaths[0];
+        }
+
+        return false;
+    }
+
+    function findFiles($folder, $findFileName) {
+
+        $allFilesPaths = Storage::disk('local')->files($folder);
+        $filesPaths = [];
+        foreach ($allFilesPaths as $filePath) {
+            $fileName = pathinfo($filePath, PATHINFO_FILENAME);
+            if($fileName==$findFileName) {
+                $filesPaths[] = $filePath;
+            }
+        }
+
+        return $filesPaths;
+    }
+
+    function saveRequestFile($file, $name, $folder) {
+
+        $title = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        Storage::disk('local')->putFileAs($folder, $file, "$name.$extension");
+
+        return "$title.$extension";
     }
 }

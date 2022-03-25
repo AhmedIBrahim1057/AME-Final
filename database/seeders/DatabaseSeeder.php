@@ -25,11 +25,11 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('test') ,
         ]);
 
-        DB::table('news')->insert([
-            'title' => 'Test',
-            'description' => 'test description',
-            'image' => '1.png' ,
-            'date' => Carbon::create('2022', '02', '02'),
-        ]);
+        // DB::table('news')->insert([
+        //     'title' => 'Test',
+        //     'description' => 'test description',
+        //     'image' => '1.png' ,
+        //     'date' => Carbon::create('2022', '02', '02'),
+        // ]);
     }
 }

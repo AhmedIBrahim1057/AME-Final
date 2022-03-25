@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Partner;
+use Storage;
 
 class PartnersController extends Controller
 {
@@ -43,15 +44,14 @@ class PartnersController extends Controller
             'url' => 'required',
         ]);
 
-        $imageName = time().'.'.$request->image->extension();  
-        $request->image->move(public_path('uploads/partners'), $imageName);
+        
+        $partner = new Partner();
+        $partner->fill( $request->except('image') );
+        $partner->save();
+        $partner->image = "partner-main-$partner->id";
+        $partner->save();
 
-        Partner::create([
-            'type' => $request->type ,
-            'name' => $request->name ,
-            'image' => $imageName ,
-            'url' => $request->url
-        ]);
+        $this->saveRequestFile( $request->image , "partner-main-$partner->id" , "/files/partners/$partner->id" );
 
         return redirect()->route('cms.partners.index')
                         ->with('success','Partner created successfully.');
@@ -87,21 +87,24 @@ class PartnersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Partner $partner)
     {
         $request->validate([
             'name' => 'required',
             'url' => 'required',
         ]);
  
- 
-        $partner = Partner::find($id);
-        $partner->type = $request->get('type');
-        $partner->name = $request->get('name');
-        $partner->description = $request->get('description');
-        $partner->image = $request->get('image');
-        $partner->url = $request->get('url');
-        $partner->update();
+        $file = $this->findFirstFile("/files/partners/$partner->id", $partner->image);
+        if($file){
+            Storage::delete($file);
+        };
+
+        $partner->fill( $request->except('image') );
+        $partner->save();
+        $partner->image = "partner-main-$partner->id";
+        $partner->save();
+
+        $this->saveRequestFile( $request->image , "partner-main-$partner->id" , "/files/partners/$partner->id" );
  
         return redirect()->route('cms.partners.index')
                         ->with('success','Partner updated successfully.');
@@ -119,5 +122,39 @@ class PartnersController extends Controller
         $partner->delete();
         return redirect()->route('cms.partners.index')
                         ->with('success','Partner deleted successfully.');
+    }
+
+    function findFirstFile($folder, $findFileName) {
+    
+        $filesPaths = $this->findFiles($folder, $findFileName);
+
+        if(count($filesPaths)>0) {
+            return $filesPaths[0];
+        }
+
+        return false;
+    }
+
+    function findFiles($folder, $findFileName) {
+
+        $allFilesPaths = Storage::disk('local')->files($folder);
+        $filesPaths = [];
+        foreach ($allFilesPaths as $filePath) {
+            $fileName = pathinfo($filePath, PATHINFO_FILENAME);
+            if($fileName==$findFileName) {
+                $filesPaths[] = $filePath;
+            }
+        }
+
+        return $filesPaths;
+    }
+
+    function saveRequestFile($file, $name, $folder) {
+
+        $title = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        Storage::disk('local')->putFileAs($folder, $file, "$name.$extension");
+
+        return "$title.$extension";
     }
 }

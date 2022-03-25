@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\News;
+use Storage;
 
 class NewsController extends Controller
 {
@@ -44,16 +45,13 @@ class NewsController extends Controller
             'date' => 'required',
         ]);
       
-        $imageName = time().'.'.$request->image->extension();  
-        $request->image->move(public_path('uploads/news'), $imageName);
-        
-        News::create([
-            'type' => $request->type ,
-            'title' => $request->title ,
-            'description' => $request->description ,
-            'image' => $imageName ,
-            'date' => $request->date
-        ]);
+        $news = new News();
+        $news->fill( $request->except('image') );
+        $news->save();
+        $news->image = "news-main-$news->id";
+        $news->save();
+
+        $this->saveRequestFile( $request->image , "news-main-$news->id" , "/files/news/$news->id" );
        
         return redirect()->route('cms.news.index')
                         ->with('success','News created successfully.');
@@ -89,7 +87,7 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, News $news)
     {
         $request->validate([
             'title' => 'required',
@@ -98,25 +96,17 @@ class NewsController extends Controller
         ]);
  
  
-        $news = News::find($id);
-        $news->type = $request->get('type');
-        $news->title = $request->get('title');
-        $news->description = $request->get('description');
-        // $news->image = $request->get('image');
-        $news->date = $request->get('date');
+        $file = $this->findFirstFile("/files/news/$news->id", $news->image);
+        if($file){
+            Storage::delete($file);
+        };
 
-        if($request->hasFile('image')){
-            $request->validate([
-              'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            ]);
+        $news->fill( $request->except('image') );
+        $news->save();
+        $news->image = "news-main-$news->id";
+        $news->save();
 
-            $imageName = time().'.'.$request->image->extension();  
-            $request->image->move(public_path('uploads/news'), $imageName);
-
-            $news->image = $imageName;
-        }
- 
-        $news->update();
+        $this->saveRequestFile( $request->image , "news-main-$news->id" , "/files/news/$news->id" );
  
         return redirect()->route('cms.news.index')
                         ->with('success','News updated successfully.');
@@ -134,5 +124,39 @@ class NewsController extends Controller
         $news->delete();
         return redirect()->route('cms.news.index')
                         ->with('success','News deleted successfully.');
+    }
+
+    function findFirstFile($folder, $findFileName) {
+    
+        $filesPaths = $this->findFiles($folder, $findFileName);
+
+        if(count($filesPaths)>0) {
+            return $filesPaths[0];
+        }
+
+        return false;
+    }
+
+    function findFiles($folder, $findFileName) {
+
+        $allFilesPaths = Storage::disk('local')->files($folder);
+        $filesPaths = [];
+        foreach ($allFilesPaths as $filePath) {
+            $fileName = pathinfo($filePath, PATHINFO_FILENAME);
+            if($fileName==$findFileName) {
+                $filesPaths[] = $filePath;
+            }
+        }
+
+        return $filesPaths;
+    }
+
+    function saveRequestFile($file, $name, $folder) {
+
+        $title = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        Storage::disk('local')->putFileAs($folder, $file, "$name.$extension");
+
+        return "$title.$extension";
     }
 }

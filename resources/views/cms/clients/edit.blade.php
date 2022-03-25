@@ -62,7 +62,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card card-outline card-info">
-            <form action="{{ route('cms.clients.update', $client) }}" method="post">
+            <form action="{{ route('cms.clients.update', $client) }}" method="post" enctype="multipart/form-data">
                 @method('PATCH')
                 @csrf
                 <div class="card-header">

@@ -64,7 +64,7 @@
                                             {{-- <td>{{$item->description}}</td> --}}
                                             <td>{{$item->date}}</td>
                                             <td>
-                                                <img src="{{asset('uploads/projects/'.$item->image)}}" style="max-width: 100px" alt="">
+                                                <img src="{{asset('storage/app/files/projects/'.$item->id.'/'.$item->image.'.png')}}" style="max-width: 100px" alt="">
                                             </td>
                                             <td>
                                                 <div class="icons d-flex">

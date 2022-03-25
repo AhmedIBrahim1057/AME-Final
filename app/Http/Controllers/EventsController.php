@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use Storage;
 
 class EventsController extends Controller
 {
@@ -44,16 +45,22 @@ class EventsController extends Controller
             'date' => 'required',
         ]);
 
-        $imageName = time().'.'.$request->image->extension();  
-        $request->image->move(public_path('uploads/events'), $imageName);
+        $event = new Event();
+        $event->fill( $request->except('image') );
+        $event->save();
+        $event->image = "event-main-$event->id";
+        $event->save();
 
-        Event::create([
-            'type' => $request->type ,
-            'title' => $request->title ,
-            'description' => $request->description ,
-            'image' => $imageName ,
-            'date' => $request->date
-        ]);
+        $this->saveRequestFile( $request->image , "event-main-$event->id" , "/files/events/$event->id" );
+
+        // foreach($request->gallary as $image){
+        //     $events_images = new events_images();
+        //     $events_images->event_id = $event->id;
+        //     $events_images->save();
+        //     $events_images->image = "event-gallary-$event->id";
+        //     $events_images->save();
+        //     $this->saveRequestFile( $request->image , "event-gallary-$events_images->id" , "/files/events/$event->id/gallary" );
+        // }
 
         return redirect()->route('cms.events.index')
                         ->with('success','Event created successfully.');
@@ -89,7 +96,7 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Event $event)
     {
         $request->validate([
             'title' => 'required',
@@ -97,13 +104,17 @@ class EventsController extends Controller
             'date' => 'required',
         ]);
  
-        $event = Event::find($id);
-        $event->type = $request->get('type');
-        $event->title = $request->get('title');
-        $event->description = $request->get('description');
-        $event->image = $request->get('image');
-        $event->date = $request->get('date');
-        $event->update();
+        $file = $this->findFirstFile("/files/events/$event->id", $event->image);
+        if($file){
+            Storage::delete($file);
+        };
+
+        $event->fill( $request->except('image') );
+        $event->save();
+        $event->image = "event-main-$event->id";
+        $event->save();
+
+        $this->saveRequestFile( $request->image , "event-main-$event->id" , "/files/events/$event->id" );
  
         return redirect()->route('cms.events.index')
                         ->with('success','Event updated successfully.');
@@ -121,5 +132,39 @@ class EventsController extends Controller
         $event->delete();
         return redirect()->route('cms.events.index')
                         ->with('success','Event deleted successfully.');
+    }
+
+    function findFirstFile($folder, $findFileName) {
+    
+        $filesPaths = $this->findFiles($folder, $findFileName);
+
+        if(count($filesPaths)>0) {
+            return $filesPaths[0];
+        }
+
+        return false;
+    }
+
+    function findFiles($folder, $findFileName) {
+
+        $allFilesPaths = Storage::disk('local')->files($folder);
+        $filesPaths = [];
+        foreach ($allFilesPaths as $filePath) {
+            $fileName = pathinfo($filePath, PATHINFO_FILENAME);
+            if($fileName==$findFileName) {
+                $filesPaths[] = $filePath;
+            }
+        }
+
+        return $filesPaths;
+    }
+
+    function saveRequestFile($file, $name, $folder) {
+
+        $title = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        Storage::disk('local')->putFileAs($folder, $file, "$name.$extension");
+
+        return "$title.$extension";
     }
 }

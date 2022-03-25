@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Project;
+use Storage;
 
 class ProjectsController extends Controller
 {
@@ -44,17 +45,22 @@ class ProjectsController extends Controller
             'date' => 'required',
         ]);
 
-        $imageName = time().'.'.$request->image->extension();  
-        $request->image->move(public_path('uploads/projects'), $imageName);
+        $project = new Project();
+        $project->fill( $request->except('image') );
+        $project->save();
+        $project->image = "project-main-$project->id";
+        $project->save();
 
-        Project::create([
-            'type' => $request->type ,
-            'title' => $request->title ,
-            'description' => $request->description ,
-            'image' => $imageName ,
-            'date' => $request->date
-        ]);
+        $this->saveRequestFile( $request->image , "project-main-$project->id" , "/files/projects/$project->id" );
 
+        // foreach($request->gallary as $image){
+        //     $projects_images = new projects_images();
+        //     $projects_images->project_id = $project->id;
+        //     $projects_images->save();
+        //     $projects_images->image = "project-gallary-$project->id";
+        //     $projects_images->save();
+        //     $this->saveRequestFile( $request->image , "project-gallary-$projects_images->id" , "/files/projects/$project->id/gallary" );
+        // }
        
         return redirect()->route('cms.projects.index')
                         ->with('success','project created successfully.');
@@ -90,7 +96,7 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Project $project)
     {
         $request->validate([
             'title' => 'required',
@@ -98,14 +104,17 @@ class ProjectsController extends Controller
             'date' => 'required',
         ]);
  
- 
-        $project = Project::find($id);
-        $project->type = $request->get('type');
-        $project->title = $request->get('title');
-        $project->description = $request->get('description');
-        $project->image = $request->get('image');
-        $project->date = $request->get('date');
-        $project->update();
+        $file = $this->findFirstFile("/files/projects/$project->id", $project->image);
+        if($file){
+            Storage::delete($file);
+        };
+
+        $project->fill( $request->except('image') );
+        $project->save();
+        $project->image = "project-main-$project->id";
+        $project->save();
+
+        $this->saveRequestFile( $request->image , "project-main-$project->id" , "/files/projects/$project->id" );
  
         return redirect()->route('cms.projects.index')
                         ->with('success','project updated successfully.');
@@ -123,5 +132,40 @@ class ProjectsController extends Controller
         $project->delete();
         return redirect()->route('cms.projects.index')
                         ->with('success','project deleted successfully.');
+    }
+
+
+    function findFirstFile($folder, $findFileName) {
+    
+        $filesPaths = $this->findFiles($folder, $findFileName);
+
+        if(count($filesPaths)>0) {
+            return $filesPaths[0];
+        }
+
+        return false;
+    }
+
+    function findFiles($folder, $findFileName) {
+
+        $allFilesPaths = Storage::disk('local')->files($folder);
+        $filesPaths = [];
+        foreach ($allFilesPaths as $filePath) {
+            $fileName = pathinfo($filePath, PATHINFO_FILENAME);
+            if($fileName==$findFileName) {
+                $filesPaths[] = $filePath;
+            }
+        }
+
+        return $filesPaths;
+    }
+
+    function saveRequestFile($file, $name, $folder) {
+
+        $title = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        Storage::disk('local')->putFileAs($folder, $file, "$name.$extension");
+
+        return "$title.$extension";
     }
 }
