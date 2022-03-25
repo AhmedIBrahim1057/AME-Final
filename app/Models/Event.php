@@ -16,4 +16,9 @@ class Event extends Model
         'image',
         'date'
     ];
+
+    public function events_images()
+    {
+        return $this->belongsTo(events_images::class);
+    }
 }

@@ -44,8 +44,17 @@ class ProductsController extends Controller
             'date' => 'required',
         ]);
 
-        Product::create($request->all());
-       
+        $imageName = time().'.'.$request->image->extension();  
+        $request->image->move(public_path('uploads/products'), $imageName);
+
+        Product::create([
+            'type' => $request->type ,
+            'title' => $request->title ,
+            'description' => $request->description ,
+            'image' => $imageName ,
+            'date' => $request->date
+        ]);
+
         return redirect()->route('cms.products.index')
                         ->with('success','product created successfully.');
     }

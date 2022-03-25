@@ -43,8 +43,16 @@ class PartnersController extends Controller
             'url' => 'required',
         ]);
 
-        Partner::create($request->all());
-       
+        $imageName = time().'.'.$request->image->extension();  
+        $request->image->move(public_path('uploads/partners'), $imageName);
+
+        Partner::create([
+            'type' => $request->type ,
+            'name' => $request->name ,
+            'image' => $imageName ,
+            'url' => $request->url
+        ]);
+
         return redirect()->route('cms.partners.index')
                         ->with('success','Partner created successfully.');
     }

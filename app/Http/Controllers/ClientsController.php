@@ -43,8 +43,16 @@ class ClientsController extends Controller
             'url' => 'required',
         ]);
 
-        Client::create($request->all());
-       
+        $imageName = time().'.'.$request->image->extension();  
+        $request->image->move(public_path('uploads/clients'), $imageName);
+
+        Client::create([
+            'type' => $request->type,
+            'name' => $request->name,
+            'image' => $imageName,
+            'url' => $request->url
+        ]);
+
         return redirect()->route('cms.clients.index')
                         ->with('success','client created successfully.');
     }

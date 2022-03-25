@@ -40,11 +40,20 @@ class NewsController extends Controller
             'type' => 'required',
             'title' => 'required',
             'description' => 'required',
-            'image' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'date' => 'required',
         ]);
-
-        News::create($request->all());
+      
+        $imageName = time().'.'.$request->image->extension();  
+        $request->image->move(public_path('uploads/news'), $imageName);
+        
+        News::create([
+            'type' => $request->type ,
+            'title' => $request->title ,
+            'description' => $request->description ,
+            'image' => $imageName ,
+            'date' => $request->date
+        ]);
        
         return redirect()->route('cms.news.index')
                         ->with('success','News created successfully.');
@@ -93,8 +102,19 @@ class NewsController extends Controller
         $news->type = $request->get('type');
         $news->title = $request->get('title');
         $news->description = $request->get('description');
-        $news->image = $request->get('image');
+        // $news->image = $request->get('image');
         $news->date = $request->get('date');
+
+        if($request->hasFile('image')){
+            $request->validate([
+              'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            ]);
+
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('uploads/news'), $imageName);
+
+            $news->image = $imageName;
+        }
  
         $news->update();
  

@@ -44,7 +44,16 @@ class ProjectsController extends Controller
             'date' => 'required',
         ]);
 
-        Project::create($request->all());
+        $imageName = time().'.'.$request->image->extension();  
+        $request->image->move(public_path('uploads/projects'), $imageName);
+
+        Project::create([
+            'type' => $request->type ,
+            'title' => $request->title ,
+            'description' => $request->description ,
+            'image' => $imageName ,
+            'date' => $request->date
+        ]);
 
        
         return redirect()->route('cms.projects.index')
