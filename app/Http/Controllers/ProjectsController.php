@@ -53,14 +53,14 @@ class ProjectsController extends Controller
 
         $this->saveRequestFile( $request->image , "project-main-$project->id" , "/files/projects/$project->id" );
 
-        // foreach($request->gallary as $image){
-        //     $projects_images = new projects_images();
-        //     $projects_images->project_id = $project->id;
-        //     $projects_images->save();
-        //     $projects_images->image = "project-gallary-$project->id";
-        //     $projects_images->save();
-        //     $this->saveRequestFile( $request->image , "project-gallary-$projects_images->id" , "/files/projects/$project->id/gallary" );
-        // }
+        foreach($request->gallary as $image){
+            $projects_images = new projects_images();
+            $projects_images->project_id = $project->id;
+            $projects_images->save();
+            $projects_images->image = "project-gallary-$project->id";
+            $projects_images->save();
+            $this->saveRequestFile( $request->image , "project-gallary-$projects_images->id" , "/files/projects/$project->id/gallary" );
+        }
        
         return redirect()->route('cms.projects.index')
                         ->with('success','project created successfully.');

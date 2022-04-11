@@ -165,19 +165,75 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <h2 class="section-title">Team <span>Details</span></h2>
+                        <h2 class="section-title">Latest <span>Events</span></h2>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 mb-60">
+                    <div class="col-md-4 mb-60">
                         <div class="owl-carousel2 owl-theme">
                             <div class="item">
                                 <div class="content">
                                     <div class="row">
-                                        <div class="col-md-5"> 
-                                        <img src="{{asset('frontendFiles/img/team/1.jpg')}}" class="img-fluid" alt=""> 
+                                        <div class="col-md-12"> 
+                                        <img src="{{asset('frontendFiles/img/news/news-3.jpg')}}" class="img-fluid" alt=""> 
                                     </div>
-                                        <div class="col-md-7">
+                                        <div class="col-md-12">
+                                            <div class="text-content v-middle">
+                                                <h3>Event Title</h3>
+                                                <p>Subtitle</p>
+                                                <p>Arhitecture the sorem ac erat suscipit bibendum nulla facilisi sedeuter nunc voluna missiontion sapien veli, conseyer tureutionyer massa in libero semper sedeuter nunesapien vivenotions eros ut turpis interdum ornare.</p>
+                                                <div class="team-details-info">
+                                                    <ul class="info-list clearfix">
+                                                        <li>
+                                                            <div class="list-title">Date :</div>
+                                                            <div class="list-description"><a href="#" tabindex="0">01/03/2022</a></div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-60">
+                        <div class="owl-carousel2 owl-theme">
+                            <div class="item">
+                                <div class="content">
+                                    <div class="row">
+                                        <div class="col-md-12"> 
+                                        <img src="{{asset('frontendFiles/img/news/news-3.jpg')}}" class="img-fluid" alt=""> 
+                                    </div>
+                                        <div class="col-md-12">
+                                            <div class="text-content v-middle">
+                                                <h3>Event Title</h3>
+                                                <p>Subtitle</p>
+                                                <p>Arhitecture the sorem ac erat suscipit bibendum nulla facilisi sedeuter nunc voluna missiontion sapien veli, conseyer tureutionyer massa in libero semper sedeuter nunesapien vivenotions eros ut turpis interdum ornare.</p>
+                                                <div class="team-details-info">
+                                                    <ul class="info-list clearfix">
+                                                        <li>
+                                                            <div class="list-title">Date :</div>
+                                                            <div class="list-description"><a href="#" tabindex="0">01/03/2022</a></div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-60">
+                        <div class="owl-carousel2 owl-theme">
+                            <div class="item">
+                                <div class="content">
+                                    <div class="row">
+                                        <div class="col-md-12"> 
+                                        <img src="{{asset('frontendFiles/img/news/news-3.jpg')}}" class="img-fluid" alt=""> 
+                                    </div>
+                                        <div class="col-md-12">
                                             <div class="text-content v-middle">
                                                 <h3>Event Title</h3>
                                                 <p>Subtitle</p>

@@ -25,6 +25,88 @@
   <link rel="stylesheet" href="{{asset('cmsFiles/plugins/bs-stepper/css/bs-stepper.min.css')}}">
   <!-- dropzonejs -->
   <link rel="stylesheet" href="{{asset('cmsFiles/plugins/dropzone/min/dropzone.min.css')}}">
+
+  <style>
+    html * {
+      box-sizing: border-box;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .upload__box {
+      padding-top: 10px;
+    }
+    .upload__inputfile {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
+    .upload__btn {
+      display: inline-block;
+      font-weight: 600;
+      color: #fff;
+      text-align: center;
+      min-width: 116px;
+      padding: 5px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid;
+      background-color: #0e3253;
+      border-color: #0e3253;
+      border-radius: 5px;
+      line-height: 26px;
+      font-size: 14px;
+    }
+    .upload__btn:hover {
+      background-color: unset;
+      color: #4b545c;
+      transition: all 0.3s ease;
+    }
+    .upload__btn-box {
+      margin-bottom: 10px;
+    }
+    .upload__img-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -10px;
+    }
+    .upload__img-box {
+      width: 200px;
+      padding: 0 10px;
+      margin-bottom: 12px;
+    }
+    .upload__img-close {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      text-align: center;
+      line-height: 24px;
+      z-index: 1;
+      cursor: pointer;
+    }
+    .upload__img-close:after {
+      content: "✖";
+      font-size: 14px;
+      color: white;
+    }
+
+    .img-bg {
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      position: relative;
+      padding-bottom: 100%;
+    }
+  </style>
 @endsection
 
 @section('content')
@@ -86,7 +168,7 @@
                             <input type="text" required name="title" class="form-control" placeholder="Enter Title">
                         </div>
                         <div class="col-md-8 pt-4">
-                            <label for="">Image</label>
+                            <label for="">Main Image</label>
                             <div class="input-group cursor-pointer">
                                 <div class="custom-file">
                                 <input type="file" name="image" required class="custom-file-input" id="exampleInputFile">
@@ -96,6 +178,19 @@
                                 <span class="input-group-text">Upload</span>
                                 </div> --}}
                             </div>
+                        </div>
+                        <div class="col-md-8 pt-4">
+                          <label for="">Gallary</label>
+                            <div class="upload__box">
+                              <div class="upload__btn-box">
+                                <label class="upload__btn">
+                                  <p>Upload images</p>
+                                  <input type="file" multiple="" name="gallary" data-max_length="20" class="upload__inputfile">
+                                </label>
+                              </div>
+                              <div class="upload__img-wrap"></div>
+                            </div>
+                          <div class="upload__img-wrap"></div>
                         </div>
                         <div class="col-md-8 pt-4">
                             <label for="">Date</label>
@@ -162,6 +257,7 @@
 <script src="{{asset('cmsFiles/dist/js/demo.js')}}"></script>
 <!-- bs-custom-file-input -->
 <script src="{{asset('cmsFiles/plugins/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
+
 <!-- Page specific script -->
 <script>
   $(function () {
@@ -328,4 +424,67 @@
   })
 </script>
 
+
+<script>
+jQuery(document).ready(function () {
+  ImgUpload();
+});
+
+function ImgUpload() {
+  var imgWrap = "";
+  var imgArray = [];
+
+  $('.upload__inputfile').each(function () {
+    $(this).on('change', function (e) {
+      imgWrap = $(this).closest('.upload__box').find('.upload__img-wrap');
+      var maxLength = $(this).attr('data-max_length');
+
+      var files = e.target.files;
+      var filesArr = Array.prototype.slice.call(files);
+      var iterator = 0;
+      filesArr.forEach(function (f, index) {
+
+        if (!f.type.match('image.*')) {
+          return;
+        }
+
+        if (imgArray.length > maxLength) {
+          return false
+        } else {
+          var len = 0;
+          for (var i = 0; i < imgArray.length; i++) {
+            if (imgArray[i] !== undefined) {
+              len++;
+            }
+          }
+          if (len > maxLength) {
+            return false;
+          } else {
+            imgArray.push(f);
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              var html = "<div class='upload__img-box'><div style='background-image: url(" + e.target.result + ")' data-number='" + $(".upload__img-close").length + "' data-file='" + f.name + "' class='img-bg'><div class='upload__img-close'></div></div></div>";
+              imgWrap.append(html);
+              iterator++;
+            }
+            reader.readAsDataURL(f);
+          }
+        }
+      });
+    });
+  });
+
+  $('body').on('click', ".upload__img-close", function (e) {
+    var file = $(this).parent().data("file");
+    for (var i = 0; i < imgArray.length; i++) {
+      if (imgArray[i].name === file) {
+        imgArray.splice(i, 1);
+        break;
+      }
+    }
+    $(this).parent().parent().remove();
+  });
+}
+</script>
 @endsection
